@@ -1,0 +1,7 @@
+numpy
+pandas
+keras==2.3.0
+scikit-learn
+gensim
+scipy
+Streamline
