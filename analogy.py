@@ -12,10 +12,16 @@ from scipy.spatial.distance import cosine, cdist
 df_svd = pd.read_csv("models/lsa.csv")
 df_svd = df_svd.set_index("words")
 vocab = list(df_svd.index)
+<<<<<<< HEAD
 fasttext = Word2Vec.load('models/fasttext.model')
+=======
 
+# Glove
+from gensim.models import KeyedVectors
+glove = KeyedVectors.load('models/glove-wiki-gigaword-300.model')
+>>>>>>> 32da833 (Added pretrained GloVe model)
 
-df = pd.read_csv('../bbc-text.csv')
+df = pd.read_csv('bbc-text.csv')
 articles = list(df['text'])
 
 sentences = []
@@ -184,21 +190,20 @@ def print_analogy(analogy, model_names):
     st.write(f"Analogy Task: {analogy_task}")
     st.write("---------------------------------------------------")
     
-    if word_a not in vocab: 
-        st.write(word_a, "not in vocab\n\n")
-        return
+    g_word = glove.most_similar(positive=[word_a, word_c], negative=[ word_b], topn=1)
+    st.write(f"Glove prediction for Analogy is : {g_word}\n\n")
+    st.write("---------------------------------------------------\n")
+
     
-    if word_b not in vocab:
-        st.write(word_b, "not in vocab\n\n")
-        return
-        
-    if word_c not in vocab:
-        st.write(word_c, "not in vocab\n\n")
-        return
-        
-    if word_true not in vocab:
-        st.write(word_true, "not in vocab\n\n")
-        return
+    
+    if word_true not in vocab or word_a not in vocab or word_b not in vocab or word_c not in vocab:
+        model_names.remove('lsa')
+        print("Some input word or words not in vocab of LSA\n\n")
+    
+    if word_true not in tokenizer.word_index or word_a not in tokenizer.word_index or word_b not in tokenizer.word_index or word_c not in tokenizer.word_index:
+        model_names.remove('skipgram')
+        model_names.remove('cbow')
+        print("Some input word or words not in vocab of skipgram and cbow\n\n")
 
     for model in model_names:
         embeddings = get_embeddings(model)
