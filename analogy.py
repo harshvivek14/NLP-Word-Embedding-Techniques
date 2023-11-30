@@ -9,21 +9,10 @@ from tensorflow.keras.models import load_model
 from scipy.spatial.distance import cosine, cdist
 
 
-
-# Skipgram Model
-skipgram = load_model('models/sgm.h5')
-
-# CBOW Model
-cbow = load_model('models/cbm.h5')
-
-# Fasttext model
-fasttext = Word2Vec.load('models/fasttext.model')
-
-# LSA
 df_svd = pd.read_csv("models/lsa.csv")
 df_svd = df_svd.set_index("words")
 vocab = list(df_svd.index)
-
+fasttext = Word2Vec.load('models/fasttext.model')
 
 
 df = pd.read_csv('../bbc-text.csv')
